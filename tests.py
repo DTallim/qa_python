@@ -29,11 +29,14 @@ class TestBooksCollector:
         collection.add_new_book(first_book)
         assert collection.get_book_genre(first_book) == ''
 
-    #некативная проверка на добавление книг с именем 0 и более 41 символа
-    @pytest.mark.parametrize('book',[''*41])
+    #негативная проверка на добавление книг с именем 0 и более 41 символа
     def test_add_new_book_add_long_name(self,book,collection):
-        collection.add_new_book(book)
-        assert len (collection.get_books_genre()) == 0
+        # Проверяем добавление книги с именем длиной 0 символов
+        assert add_book('') == False
+
+        # Проверяем добавление книги с именем длиной более 41 символа
+        long_name = 'A' * 42
+        assert add_book(long_name) == False
 
     #Негативная проверка повторного добавления одинакоковых книг
     def Test_add_new_book_double_not_added(self,collection):
@@ -61,12 +64,15 @@ class TestBooksCollector:
         assert collection.get_book_genre(first_book) == other_genre
 
     #Негативная проверка добавления жанра не из списка genre из списка books_genre
-    def test_set_book_genre_miss_genre_not_add(self, collection):
-        first_book = 'Новая книга 2'
+    def test_set_book_genre_miss_genre_not_add(self, book_collection):
+        collection = BookCollection(book_collection)
         missing_genre = 'Приключение'
-        collection.add_new_book(first_book)
-        collection.set_book_genre(first_book,missing_genre)
-        assert collection.get_book_genre(first_book) == ''
+
+        # Пытаемся установить несуществующий жанр для второй книги
+        collection.set_book_genre('Новая книга 2', missing_genre)
+
+        # Проверяем, что жанр книги остался пустым
+        assert collection.get_book_genre('Новая книга 2') == ''
 
     #Проверка вывода книг определенного жанра
     def test_get_books_specific_genre_succ(self, collection_five_books):

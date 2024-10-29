@@ -23,3 +23,9 @@ def collection_five_books(collection):
         collect.set_book_genre(books[i], genre[i])
 
     return collect
+@pytest.fixture
+def book_collection():
+    return [
+        {'title': 'Новая книга 1', 'genre': 'Роман'},
+        {'title': 'Новая книга 2', 'genre': ''}
+    ]
