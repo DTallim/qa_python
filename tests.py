@@ -30,13 +30,10 @@ class TestBooksCollector:
         assert collection.get_book_genre(first_book) == ''
 
     #негативная проверка на добавление книг с именем 0 и более 41 символа
-    def test_add_new_book_add_long_name(self,book,collection):
-        # Проверяем добавление книги с именем длиной 0 символов
-        assert add_book('') == False
-
-        # Проверяем добавление книги с именем длиной более 41 символа
-        long_name = 'A' * 42
-        assert add_book(long_name) == False
+    @pytest.mark.parametrize('book_name', ['', 'К' * 41])
+    def test_add_new_book_add_long_name(self, book_name, collector):
+            collector.add_new_book(book_name)
+            assert len(collector.get_books_genre()) == 0
 
     #Негативная проверка повторного добавления одинакоковых книг
     def Test_add_new_book_double_not_added(self,collection):
